@@ -25,7 +25,7 @@
 			});
 			$.getJSON("download.json", function (data) {
 				for (var md of data) {
-					md.Name = md.authors[0].Name;
+					md.Author = md.authors[0].Name;
 					md.Actions = "<a href=\"drama.html?drama="+md.documentId+"\" target=\"_blank\">Open</a>";
 					var row = document.createElement("tr");
 					for (var c of columns) {
