@@ -11,11 +11,10 @@
 		<script src="js/util.js"></script>
 		<script>
 		var columns = [
-			{ title: "Id", data: "documentId" },
-			{ title: "Title", data: "documentTitle" },
-			{ title: "Date", data: "ReferenceDate" },
-			{ title: "Author", data: "Author" },
-			{ title: "Action", data: "Actions" }
+			{ title: "Name", data: "documentId" },
+			{ title: "Rank", data: "documentTitle" },
+			{ title: "Points", data: "ReferenceDate" },
+			{ title: "Prestige", data: "Author" }
 		];
 		$(function() {
 			var dTable = $("table").DataTable({
@@ -23,7 +22,7 @@
 				pageLength: 100,
 				retrieve: false
 			});
-			$.getJSON("meta.json", function (data) {
+			$.getJSON("download.json", function (data) {
 				for (var md of data) {
 					md.Author = md.authors[0].Name;
 					md.Actions = "<a href=\"drama.html?drama="+md.documentId+"\" target=\"_blank\">Open</a>";
