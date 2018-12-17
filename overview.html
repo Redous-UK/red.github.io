@@ -10,9 +10,8 @@
 		<script src="js/jquery.mobile-1.4.5.min.js"></script>
 		<script src="js/util.js"></script>
 		<script>
-
 		var columns = [
-			{ title: "Name", data: "username"},
+			{ title: "Name", data: "name"},
 			{ title: "Rank", data: "rank"},
 			{ title: "Points", data: "points"},
 			{ title: "Prestige", data: "prestige"}
@@ -21,11 +20,11 @@
 			var dTable = $("table").DataTable({
 				columns: columns,
 				pageLength: 100,
-				retrieve: false
+				retrieve: true
 			});
 			$.getJSON("download.json", function (data) {
 				for (var md of data) {
-					md.Actions = "<a href=\"drama.html?drama="+md.name+"\" target=\"_blank\">Open</a>";
+					md.Actions = "<a href=\"drama.html?drama="+md.username+"\" target=\"_blank\">Open</a>";
 					var row = document.createElement("tr");
 					for (var c of columns) {
 						//$(row).append("<td>"+md[c.data]+"</td>");
@@ -33,7 +32,6 @@
 					$(".ui-content tbody").append(row);
 					//console.log(md);
 					dTable.row.add(md).draw();
-
 				}
 			});
 		});
