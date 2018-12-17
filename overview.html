@@ -20,7 +20,7 @@
 			var dTable = $("table").DataTable({
 				columns: columns,
 				pageLength: 100,
-				retrieve: true
+				retrieve: false
 			});
 			$.getJSON("download.json", function (data) {
 				for (var md of data) {
