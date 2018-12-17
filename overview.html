@@ -10,6 +10,11 @@
 		<script src="js/jquery.mobile-1.4.5.min.js"></script>
 		<script src="js/util.js"></script>
 		<script>
+		var printError = function(error, explicit) {
+			console.log(`[${explicit ? 'EXPLICIT' : 'INEXPLICIT'}] ${error.name}: ${error.message}`);
+		}
+ 
+		try {
 		var columns = [
 			{ title: "Id", data: "documentId" },
 			{ title: "Title", data: "documentTitle" },
@@ -40,6 +45,13 @@
 				}
 			});
 		});
+		} catch (e) {
+    if (e instanceof SyntaxError) {
+        printError(e, true);
+    } else {
+        printError(e, false);
+    }
+}
 		</script>
 	</head>
 	<body>
