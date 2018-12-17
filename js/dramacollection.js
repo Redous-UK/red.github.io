@@ -8,6 +8,10 @@ function DramaCollection(selector, userSettings) {
 		{ title: "DisplayId", fun: function(d) { return d.meta.DisplayId; }, data: "DisplayId" },
 		{ title: "Title", fun: function(d) { return d.meta.documentTitle; }, data: "title" },
 		{ title: "Author", fun: function(d) { return d.meta.authors[0].Name; }, data: "authorname" },
+		{ title: "Name", fun: function(d) { return d.meta.name; }, data: "name" },
+		{ title: "Rank", fun: function(d) { return d.meta.rank; }, data: "rank" },
+		{ title: "Points", fun: function(d) { return d.meta.points; }, data: "points" },
+		{ title: "Prestige", fun: function(d) { return d.meta.prestige; }, data: "prestige" },
 		// { title: "AuthorPnd", fun: function(d) { return d.meta.authors[0].Pnd; }, data: "authorpnd" },
 		{ title: "Reference Year", fun: function(d) { return d.meta.ReferenceDate; }, data: "ReferenceYear" },
 		// simple lengths
