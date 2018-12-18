@@ -22,7 +22,7 @@
 				pageLength: 100,
 				retrieve: true
 			});
-			$.getJSON("https://api.itslit.uk/G4G/getList/all/pve/download.json", function (data) {
+			$.getJSON("download.json", function (data) {
 				for (var md of data) {
 					md.Actions = "<a href=\"drama.html?drama="+md.username+"\" target=\"_blank\">Open</a>";
 					var row = document.createElement("tr");
