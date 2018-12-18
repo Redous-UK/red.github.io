@@ -10,29 +10,32 @@
 		<script src="js/jquery.mobile-1.4.5.min.js"></script>
 		<script src="js/util.js"></script>
 		
-		<script type="text/javascript" charset="utf8">
-        $(document).ready(function () {
-          var  oTable = $('#tblData').dataTable({
-              "ajax":{
-                    "type": 'POST',
-                    "url": "https://api.itslit.uk/G4G/getList/all/pve/",
-                    "dataType": 'json',
-                    "contentType": "application/json; charset=utf-8",
-                    "dataSrc": function (json) {
-                       return json.d;
-                       }
-                    },
-                "columns":[
-							{ title: "Name", data: "name" },
-							{ title: "Rank", data: "rank" },
-							{ title: "Points", data: "points" },
-							{ title: "Prestige", data: "prestige" }
-						]
-               });
-            });
-        
-   </script>
-		
+		<script>
+		var columns = [
+			{ title: "Name", data: "name"},
+			{ title: "Rank", data: "rank"},
+			{ title: "Points", data: "points"},
+			{ title: "Prestige", data: "prestige"}
+		];
+		$(function() {
+			var dTable = $("table").DataTable({
+				columns: columns,
+				pageLength: 100,
+				retrieve: true
+			});
+			$.JSON.parse("https://api.itslit.uk/G4G/getList/all/pve/", function (data) {
+				for (var md of data) {
+					var row = document.createElement("tr");
+					for (var c of columns) {
+						//$(row).append("<td>"+md[c.data]+"</td>");
+					}
+					$(".ui-content tbody").append(row);
+					//console.log(md);
+					dTable.row.add(md).draw();
+				}
+			});
+		});
+		</script>
 	</head>
 	<body>
 	<div data-role="page">
