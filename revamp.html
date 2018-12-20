@@ -14,13 +14,14 @@
 				var columns = [
 			{ title: "Name", data: "name"},
 			{ title: "Rank", data: "rank"},
-			{ title: "Points", data: { _: "points", sort: "points"}},
+			{ title: "Points", data: "points"},
 			{ title: "Prestige", data: "prestige"}
 		];
 		$(function() {
 			var dTable = $("table").DataTable({
 				columns: columns,
 				pageLength: 100,
+				data-sort-name: [3, 'desc'],
 				retrieve: true
 			});
 			
