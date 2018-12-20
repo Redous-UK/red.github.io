@@ -11,7 +11,18 @@
 		<script src="js/util.js"></script>
 		
 		<script>
-		
+				var columns = [
+			{ title: "Name", data: "name"},
+			{ title: "Rank", data: "rank"},
+			{ title: "Points", data: "points"},
+			{ title: "Prestige", data: "prestige"}
+		];
+		$(function() {
+			var dTable = $("table").DataTable({
+				columns: columns,
+				pageLength: 100,
+				retrieve: true
+			});
 		$.getJSON("https://api.itslit.uk/G4G/getList/all/pve/", function(data){
     data = data['response'];
     for (var i = 0, len = data.length; i < len; i++) {
