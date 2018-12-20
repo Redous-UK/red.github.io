@@ -16,9 +16,15 @@
     data = data['response'];
     for (var i = 0, len = data.length; i < len; i++) {
 
+	var row = document.createElement("tr");
+					for (var c of columns) {
+						//$(row).append("<td>"+md[c.data]+"</td>");
+					}
+					$(".ui-content tbody").append(row);
+					//console.log(md);
+					dTable.row.add(data[i]).draw();
 	
-	
-        console.log(data[i]);
+        //console.log(data[i]);
     }
 });
 		
