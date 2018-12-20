@@ -15,17 +15,7 @@
 		$.getJSON("https://api.itslit.uk/G4G/getList/all/pve/", function(data){
     data = data['response'];
     for (var i = 0, len = data.length; i < len; i++) {
-	
-	for (var md of data) {
-					md.Actions = "<a href=\"drama.html?drama="+md.username+"\" target=\"_blank\">Open</a>";
-					var row = document.createElement("tr");
-					for (var c of columns) {
-						//$(row).append("<td>"+md[c.data]+"</td>");
-					}
-					$(".ui-content tbody").append(row);
-					//console.log(md);
-					dTable.row.add(md).draw();
-				}
+
 	
 	
         console.log(data[i]);
