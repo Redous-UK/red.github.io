@@ -21,6 +21,7 @@
 			var dTable = $("table").DataTable({
 				columns: columns,
 				pageLength: 100,
+				Order: [3, 'des'] )
 				retrieve: true
 			});
 			
@@ -35,10 +36,6 @@
 									$(".ui-content tbody").append(row);
 									//console.log(md);
 									dTable.row.add(data[i]).draw();
-					
-						dTable
-						.order( [ 3, 'des' ] )
-						.draw();
 					}
 				});
 			});	
