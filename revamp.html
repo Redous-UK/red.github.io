@@ -23,22 +23,23 @@
 				pageLength: 100,
 				retrieve: true
 			});
-		$.getJSON("https://api.itslit.uk/G4G/getList/all/pve/", function(data){
-    data = data['response'];
-    for (var i = 0, len = data.length; i < len; i++) {
+			
+				$.getJSON("https://api.itslit.uk/G4G/getList/all/pve/", function(data){
+					data = data['response'];
+					for (var i = 0, len = data.length; i < len; i++) {
 
-	var row = document.createElement("tr");
-					for (var c of columns) {
-						//$(row).append("<td>"+md[c.data]+"</td>");
+					var row = document.createElement("tr");
+									for (var c of columns) {
+										//$(row).append("<td>"+md[c.data]+"</td>");
+									}
+									$(".ui-content tbody").append(row);
+									//console.log(md);
+									dTable.row.add(data[i]).draw();
+					
+						//console.log(data[i]);
 					}
-					$(".ui-content tbody").append(row);
-					//console.log(md);
-					dTable.row.add(data[i]).draw();
-	
-        //console.log(data[i]);
-    }
-});
-		
+				});
+			});	
 		</script>
 		
 
