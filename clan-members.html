@@ -1,0 +1,160 @@
+<!doctype html>
+<html>
+	<head>
+		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-touch.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-animate.js"></script>
+		<script src="http://ui-grid.info/docs/grunt-scripts/csv.js"></script>
+		<script src="http://ui-grid.info/docs/grunt-scripts/pdfmake.js"></script>
+		<script src="http://ui-grid.info/docs/grunt-scripts/vfs_fonts.js"></script>
+		<script src="http://ui-grid.info/release/ui-grid.js"></script>
+		<link rel="stylesheet" href="http://ui-grid.info/release/ui-grid.css" type="text/css">
+		<!-- <link rel="stylesheet" href="main.css" type="text/css"> -->
+	</head>
+	<body>
+	<style>
+	.grid { 
+		height: 800px; 
+		width: 500px;
+	}
+    input[type="text"].ui-grid-filter-input {
+        padding: 0 0px 0 0;
+        }
+	</style>
+	<div ng-app="app" ng-controller="MainCtrl">
+		<select ng-model="selectedClan" ng-options="x.name for x in clans" ng-change="getList()"></select> <strong>{{ gridOptions1.data.length }} Members</strong>
+		<!-- <p>{{ selectedClan.ID }}</p> -->
+		<!-- <p><strong>Grid with native pagination controls</strong></p> -->
+		<div>
+			<div><img style="position:fixed; width:500px;" ng-src="http://www.bungie.net{{banner}}" /></div>
+			<div><img style="position:relative; height:94px;" ng-src="http://www.bungie.net{{avatar}}" /></div>
+		</div>
+		<div ui-grid="gridOptions1" ui-grid-exporter class="grid"></div>
+	</div>
+	
+	<script>
+	var app = angular.module('app', ['ngTouch', 'ui.grid', 'ui.grid.exporter', 'ui.grid.pagination']);
+	app.service('getData', function() {
+		this.getMembers = function(ID) {
+		//debugger
+			req.url = "https://www.bungie.net/platform/GroupV2/" + $scope.selectedClan.ID + "/Members/?currentpage=1&memberType=none";
+			$http(req).then(function (response) {
+				return response.data.Response.results;
+			});
+		};
+		
+		this.getClanInfo = function(ID) {
+		
+		}
+	});
+	app.controller('MainCtrl', ['$scope', '$http', '$filter', function ($scope, $http, $filter, getData) {
+	  $scope.clans = [
+		{name : "G4G Cygnus", ID : "1804167"},
+		{name : "G4G Orion", ID : "1784816"},
+		{name : "G4G Pegasus", ID : "1955871"},
+		{name : "G4G Draco", ID : "2681987"},
+		{name : "G4G Artemis", ID : "144262"}
+	  ];
+	  
+	$scope.platforms = [
+		{id : "1", name: "Xbox"},
+		{id : "2", name: "PS4"},
+		{id : "4", name: "PC"}
+	];
+	
+	$scope.selectedClan = $scope.clans[0];
+
+	$scope.getType = function(id){
+		var text = $filter('filter')($scope.platforms, {id: id })[0].name;
+		return text
+		<!-- return $scope.platforms.filter(function(item){  -->
+			<!-- return (item.id === id).name;  -->
+		<!-- });  -->
+	};
+	  
+	$scope.gridOptions1 = {
+		enablePaginationControls: false,
+		exporterMenuCsv: true,
+		enableGridMenu: true,
+		enableFiltering: true,
+		<!-- paginationPageSizes: [25, 50, 75], -->
+		paginationPageSize: 100,
+		columnDefs: [
+			<!-- { name: '#', cellTemplate: '<span>{{row.index}}+1</span>'}, -->
+			{ name: ' ',
+				width: '50', 
+				cellTemplate: '<img height="35" ng-src="http://www.bungie.net/{{row.entity.bungieNetUserInfo.iconPath}}" alt="Description" />', 
+				enableSorting: false, 
+				enableColumnMenu: false,
+				enableFiltering: false			
+			},
+			{ name: 'Display Name', field:'destinyUserInfo.displayName', enableSorting: false, enableColumnMenu: false },
+			//{ name: 'Membership ID', field:'destinyUserInfo.membershipId', enableSorting: false, enableColumnMenu: false, enableFiltering: false },
+			{ name: 'Platform', 
+				cellTemplate: '<div style="padding:5px">{{ grid.appScope.getType( row.entity.destinyUserInfo.membershipType ) }}</div>', 
+				enableSorting: false, 
+				enableColumnMenu: false,
+				width: '80'
+			},
+			{ name: 'Join Date', field: 'joinDate', cellFilter: 'date' },
+            { name: 'Last Seen', field: 'lastSeen', cellFilter: 'date' }
+		]
+	};
+
+	var req = {
+		 method: "GET",
+		 url: '',
+		 headers: {
+			'X-API-Key':'667ffd8cdcf54565b8ea3d2657be4169'
+		}
+	};
+	
+	//$scope.gridOptions1.data = getData.getMembers($scope.selectedClan.ID);
+	
+//	$getData = function(){
+//		debugger
+//	};
+                                            
+    //load data for the images on the preselected group
+	req.url = "https://www.bungie.net/platform/GroupV2/" + $scope.selectedClan.ID + "/"; //Members/?currentpage=1&memberType=none";
+	$http(req).then(function (response) {
+		$scope.banner = response.data.Response.detail.bannerPath;
+		$scope.avatar = response.data.Response.detail.avatarPath;
+	});
+	
+	//load inital data for the grid based on the preselected group
+	req.url = "https://www.bungie.net/platform/GroupV2/" + $scope.selectedClan.ID + "/Members/?currentpage=1&memberType=none";
+	$http(req).then(function (response) {
+        var members = response.data.Response.results;
+        members.forEach(function (member){
+            req.url = "https://www.bungie.net/platform/Destiny2/" + member.destinyUserInfo.membershipType + "/Profile/" + member.destinyUserInfo.membershipId + "/?components=100";
+            $http(req).then(function (bungieResponse) {
+                member.lastSeen = bungieResponse.data.Response.profile.data.dateLastPlayed;
+            });//end of profile call
+        });// end for each member
+		$scope.gridOptions1.data = members;
+	});
+
+	$scope.getList = function(){
+        req.url = "https://www.bungie.net/platform/GroupV2/" + $scope.selectedClan.ID + "/"; //Members/?currentpage=1&memberType=none";
+		$http(req).then(function (response) {
+			$scope.banner = response.data.Response.detail.bannerPath;
+			$scope.avatar = response.data.Response.detail.avatarPath;
+		  });
+        
+        req.url = "https://www.bungie.net/platform/GroupV2/" + $scope.selectedClan.ID + "/Members/?currentpage=1&memberType=none";
+		$http(req).then(function (response) {
+            var members = response.data.Response.results;
+            members.forEach(function (member){
+                req.url = "https://www.bungie.net/platform/Destiny2/" + member.destinyUserInfo.membershipType + "/Profile/" + member.destinyUserInfo.membershipId + "/?components=100";
+                $http(req).then(function (bungieResponse) {
+                    member.lastSeen = bungieResponse.data.Response.profile.data.dateLastPlayed;
+                });//end of profile call
+            });// end for each member
+            $scope.gridOptions1.data = members;
+	    });	
+    };
+    }]);
+</script>
+</body>
+</html>
